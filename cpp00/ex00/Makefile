@@ -1,12 +1,17 @@
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++11
 NAME = megaphone
-SRCDIR = .
+
+SRCDIR = src
+INCDIR = includes
 OBJDIR = obj
 
-# Source files
+INCLUDES = -I$(INCDIR)
+
 SOURCES = MegaPhone.cpp
 OBJECTS = $(SOURCES:%.cpp=$(OBJDIR)/%.o)
+
+SRCFILES = $(SOURCES:%.cpp=$(SRCDIR)/%.cpp)
 
 all: $(NAME)
 
@@ -14,7 +19,7 @@ $(NAME): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(NAME)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp | $(OBJDIR)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)

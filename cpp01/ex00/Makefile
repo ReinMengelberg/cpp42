@@ -1,35 +1,35 @@
-# Compiler
 CXX = g++
-
-# Compiler flags
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
+NAME = ex00
 
-# Source files
-SRCS = newZombie.cpp randomChump.cpp Zombie.cpp main.cpp 
+SRCDIR = src
+INCDIR = includes
+OBJDIR = obj
 
-# Object files
-OBJS = $(SRCS:.cpp=.o)
+INCLUDES = -I$(INCDIR)
 
-# Executable name
-TARGET = ex00
+SOURCES = newZombie.cpp randomChump.cpp Zombie.cpp main.cpp
+OBJECTS = $(SOURCES:%.cpp=$(OBJDIR)/%.o)
 
-# Default target
-all: $(TARGET)
+SRCFILES = $(SOURCES:%.cpp=$(SRCDIR)/%.cpp)
 
-# Rule to link object files into the executable
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
+all: $(NAME)
 
-# Rule to compile source files into object files
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+$(NAME): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(NAME)
 
-# Clean target to remove object files and the executable
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp | $(OBJDIR)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -rf $(OBJDIR)
 
-fclean:
-	rm -f $(OBJS) $(TARGET)
+fclean: clean
+	rm -f $(NAME)
 
-# Phony targets
-.PHONY: all clean
+re: fclean all
+
+.PHONY: all clean fclean re
