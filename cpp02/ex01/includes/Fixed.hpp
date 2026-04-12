@@ -18,8 +18,8 @@ class Fixed {
 		int toInt(void) const;
 
 	private:
-		int _value;
-		static const int _bits;
+		int value;
+		static const int bits;
 };
 
 std::ostream &operator<<(std::ostream &out, const Fixed &fixed);
