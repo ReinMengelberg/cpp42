@@ -1,7 +1,7 @@
-// ./randomChump.cpp
+// ./zombieHorde.cpp
 #include "Zombie.hpp"
 
-Zombie *zombieHorde(int N, std::string &name) {
+Zombie *zombieHorde(int N, std::string name) {
 	Zombie *horde;
 
 	horde = new Zombie[N];

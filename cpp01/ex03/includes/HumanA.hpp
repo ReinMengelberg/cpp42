@@ -6,21 +6,18 @@
 #include <string>
 
 class HumanA {
-	public: 
+	public:
 		HumanA(std::string name, Weapon &weapon); // Constructor
 		~HumanA(void); // Destructor
 
 		std::string getName(void) const;
 		void setName(const std::string &name);
 
-		void setWeapon(Weapon &Weapon);
-		Weapon *getWeapon(void);
-
 		void attack(void);
 
 	private:
 		std::string name;
-		Weapon *weapon;
+		Weapon &weapon;
 };
 
 #endif
