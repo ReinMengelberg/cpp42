@@ -1,14 +1,11 @@
-// ./Zombie.cpp
 #include "Zombie.hpp"
 #include <iostream>
 
 Zombie::Zombie(void) {
-    // Constructor implementation
-    name = "DefaultZombie";
+    name = "Unknown";
 }
 
 Zombie::~Zombie(void) {
-    // Destructor implementation
     std::cout << name << " has been destroyed!" << std::endl;
 }
 
