@@ -3,10 +3,10 @@
 
 class Fixed {
 	public:
-		Fixed(); // Constructor
-		Fixed(const Fixed &source); // Copy Constructor
-		Fixed &operator=(const Fixed &source); // Copy Assignment Operator
-		~Fixed(); // Destructor
+		Fixed();
+		Fixed(const Fixed &source);
+		Fixed &operator=(const Fixed &source);
+		~Fixed();
 
 		void setRawBits(int const raw);
 		int getRawBits(void) const;
