@@ -8,42 +8,42 @@ Contact::Contact() {
     darkest_secret = "";
 }
 
-void Contact::setFirstName(const string &input) {
+void Contact::setFirstName(const std::string &input) {
     first_name = input;
 }
 
-void Contact::setLastName(const string &input) {
+void Contact::setLastName(const std::string &input) {
     last_name = input;
 }
 
-void Contact::setNickname(const string &input) {
+void Contact::setNickname(const std::string &input) {
     nickname = input;
 }
 
-void Contact::setPhoneNumber(const string &input) {
+void Contact::setPhoneNumber(const std::string &input) {
     phone_number = input;
 }
 
-void Contact::setDarkestSecret(const string &input) {
+void Contact::setDarkestSecret(const std::string &input) {
     darkest_secret = input;
 }
 
-string Contact::getFirstName(void) const {
+std::string Contact::getFirstName(void) const {
     return first_name;
 }
 
-string Contact::getLastName(void) const {
+std::string Contact::getLastName(void) const {
     return last_name;
 }
 
-string Contact::getNickname(void) const {
+std::string Contact::getNickname(void) const {
     return nickname;
 }
 
-string Contact::getPhoneNumber(void) const {
+std::string Contact::getPhoneNumber(void) const {
     return phone_number;
 }
 
-string Contact::getDarkestSecret(void) const {
+std::string Contact::getDarkestSecret(void) const {
     return darkest_secret;
 }

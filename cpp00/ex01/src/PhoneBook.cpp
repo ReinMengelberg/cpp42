@@ -1,53 +1,51 @@
 #include "PhoneBook.hpp"
 #include "Contact.hpp"
 
-using namespace std;
-
 PhoneBook::PhoneBook() {
     count = 0;
     index = 0;
 }
 
 void PhoneBook::addContact() {
-    string first;
-    string last;
-    string nick;
-    string pn;
-    string ds;
+    std::string first;
+    std::string last;
+    std::string nick;
+    std::string pn;
+    std::string ds;
 
     do {
-        cout << "Enter first name: ";
-        getline(cin, first);
+        std::cout << "Enter first name: ";
+        std::getline(std::cin, first);
         if (first.empty())
-            cout << "First name cannot be empty. Please try again." << endl;
+            std::cout << "First name cannot be empty. Please try again." << std::endl;
     } while (first.empty());
 
     do {
-        cout << "Enter last name: ";
-        getline(cin, last);
+        std::cout << "Enter last name: ";
+        std::getline(std::cin, last);
         if (last.empty())
-            cout << "Last name cannot be empty. Please try again." << endl;
+            std::cout << "Last name cannot be empty. Please try again." << std::endl;
     } while (last.empty());
 
     do {
-        cout << "Enter nickname: ";
-        getline(cin, nick);
+        std::cout << "Enter nickname: ";
+        std::getline(std::cin, nick);
         if (nick.empty())
-            cout << "Nickname cannot be empty. Please try again." << endl;
+            std::cout << "Nickname cannot be empty. Please try again." << std::endl;
     } while (nick.empty());
 
     do {
-        cout << "Enter phone number: ";
-        getline(cin, pn);
+        std::cout << "Enter phone number: ";
+        std::getline(std::cin, pn);
         if (pn.empty())
-            cout << "Phone number cannot be empty. Please try again." << endl;
+            std::cout << "Phone number cannot be empty. Please try again." << std::endl;
     } while (pn.empty());
 
     do {
-        cout << "Enter darkest secret: ";
-        getline(cin, ds);
+        std::cout << "Enter darkest secret: ";
+        std::getline(std::cin, ds);
         if (ds.empty())
-            cout << "Darkest secret cannot be empty. Please try again." << endl;
+            std::cout << "Darkest secret cannot be empty. Please try again." << std::endl;
     } while (ds.empty());
 
     contacts[index].setFirstName(first);
@@ -64,21 +62,21 @@ void PhoneBook::addContact() {
 
 void PhoneBook::searchContacts() {
     if (count == 0) {
-        cout << "No contacts saved yet..." << endl;
+        std::cout << "No contacts saved yet..." << std::endl;
         return;
     }
 
-    cout << "|";
-    cout << setw(10) << "Index" << "|";
-    cout << setw(10) << "First Name" << "|";
-    cout << setw(10) << "Last Name" << "|";
-    cout << setw(10) << "Nickname" << "|";
-    cout << endl;
+    std::cout << "|";
+    std::cout << std::setw(10) << "Index" << "|";
+    std::cout << std::setw(10) << "First Name" << "|";
+    std::cout << std::setw(10) << "Last Name" << "|";
+    std::cout << std::setw(10) << "Nickname" << "|";
+    std::cout << std::endl;
 
     for (int i = 0; i < count; i++) {
-        string first = contacts[i].getFirstName();
-        string last = contacts[i].getLastName();
-        string nick = contacts[i].getNickname();
+        std::string first = contacts[i].getFirstName();
+        std::string last = contacts[i].getLastName();
+        std::string nick = contacts[i].getNickname();
 
         if (first.length() > 10) {
             first = first.substr(0, 9) + ".";
@@ -92,44 +90,44 @@ void PhoneBook::searchContacts() {
             nick = nick.substr(0, 9) + ".";
         }
 
-        cout << "|";
-        cout << setw(10) << i << "|";
-        cout << setw(10) << first << "|";
-        cout << setw(10) << last << "|";
-        cout << setw(10) << nick << "|";
-        cout << endl;
+        std::cout << "|";
+        std::cout << std::setw(10) << i << "|";
+        std::cout << std::setw(10) << first << "|";
+        std::cout << std::setw(10) << last << "|";
+        std::cout << std::setw(10) << nick << "|";
+        std::cout << std::endl;
     }
 
-    string input;
+    std::string input;
     int selected;
-    
-    cout << "\nEnter the index of the contact to display: ";
-    getline(cin, input);
-    
+
+    std::cout << "\nEnter the index of the contact to display: ";
+    std::getline(std::cin, input);
+
     // Convert string to int and validate
     try {
-        selected = stoi(input);
+        selected = std::stoi(input);
         if (selected < 0 || selected >= count) {
-            cout << "Error: Index out of range. Valid range is 0 to " << (count - 1) << endl;
+            std::cout << "Error: Index out of range. Valid range is 0 to " << (count - 1) << std::endl;
             return;
         }
         displayContact(selected);
     } catch (...) {
-        cout << "Error: Invalid input. Please enter a valid number." << endl;
+        std::cout << "Error: Invalid input. Please enter a valid number." << std::endl;
     }
 }
 
 void PhoneBook::displayContact(int i) {
     if (i < 0 || i >= count) {
-        cout << "Invalid index!" << endl;
+        std::cout << "Invalid index!" << std::endl;
         return;
     }
-    
-    cout << "\n=== Contact Details ===" << endl;
-    cout << "First Name: " << contacts[i].getFirstName() << endl;
-    cout << "Last Name: " << contacts[i].getLastName() << endl;
-    cout << "Nickname: " << contacts[i].getNickname() << endl;
-    cout << "Phone Number: " << contacts[i].getPhoneNumber() << endl;
-    cout << "Darkest Secret: " << contacts[i].getDarkestSecret() << endl;
-    cout << "======================" << endl;
+
+    std::cout << "\n=== Contact Details ===" << std::endl;
+    std::cout << "First Name: " << contacts[i].getFirstName() << std::endl;
+    std::cout << "Last Name: " << contacts[i].getLastName() << std::endl;
+    std::cout << "Nickname: " << contacts[i].getNickname() << std::endl;
+    std::cout << "Phone Number: " << contacts[i].getPhoneNumber() << std::endl;
+    std::cout << "Darkest Secret: " << contacts[i].getDarkestSecret() << std::endl;
+    std::cout << "======================" << std::endl;
 }

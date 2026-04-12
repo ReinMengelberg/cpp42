@@ -1,19 +1,17 @@
 #include "PhoneBook.hpp"
 #include <iostream>
 
-using namespace std;
-
 int main(void) {
     PhoneBook phonebook;
-    string command;
-    
-    cout << "Welcome to the PhoneBook!" << endl;
-    cout << "Available commands: ADD, SEARCH, EXIT" << endl;
-    
+    std::string command;
+
+    std::cout << "Welcome to the PhoneBook!" << std::endl;
+    std::cout << "Available commands: ADD, SEARCH, EXIT" << std::endl;
+
     while (true) {
-        cout << "\nEnter a command: ";
-        getline(cin, command);
-        
+        std::cout << "\nEnter a command: ";
+        std::getline(std::cin, command);
+
         if (command == "ADD") {
             phonebook.addContact();
         }
@@ -21,11 +19,11 @@ int main(void) {
             phonebook.searchContacts();
         }
         else if (command == "EXIT") {
-            cout << "Goodbye!" << endl;
+            std::cout << "Goodbye!" << std::endl;
             break;
         }
         else {
-            cout << "Invalid command. Please use ADD, SEARCH, or EXIT." << endl;
+            std::cout << "Invalid command. Please use ADD, SEARCH, or EXIT." << std::endl;
         }
     }
     

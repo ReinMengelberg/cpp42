@@ -6,8 +6,6 @@
 #include <iomanip> 
 #include <Contact.hpp>
 
-using namespace std;
-
 class PhoneBook {
     private:
         Contact contacts[8];
