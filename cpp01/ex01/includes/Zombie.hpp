@@ -6,12 +6,12 @@
 
 class Zombie {
 	public: 
-		Zombie(void); // Constructor
-		~Zombie(void); // Destructor
+		Zombie(void);
+		~Zombie(void);
 
 		void announce(void);
-		std::string getName(void) const; // Added const for getter
-		void setName(const std::string &name); // Added const 
+		std::string getName(void) const;
+		void setName(const std::string &name);
 
 	private:
 		std::string name;

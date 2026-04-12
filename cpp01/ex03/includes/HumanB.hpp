@@ -7,8 +7,8 @@
 
 class HumanB {
 	public: 
-		HumanB(std::string name); // Constructor
-		~HumanB(void); // Destructor
+		HumanB(std::string name);
+		~HumanB(void);
 
 		std::string getName(void) const;
 		void setName(const std::string &name);

@@ -7,8 +7,8 @@
 
 class HumanA {
 	public:
-		HumanA(std::string name, Weapon &weapon); // Constructor
-		~HumanA(void); // Destructor
+		HumanA(std::string name, Weapon &weapon);
+		~HumanA(void);
 
 		std::string getName(void) const;
 		void setName(const std::string &name);

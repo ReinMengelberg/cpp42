@@ -4,9 +4,7 @@
 #include <sstream>
 #include <string>
 
-static std::string replaceAll(const std::string &content,
-                              const std::string &s1,
-                              const std::string &s2) {
+static std::string replaceAll(const std::string &content, const std::string &s1, const std::string &s2) {
     std::string result;
     size_t pos = 0;
     size_t found;
@@ -22,8 +20,7 @@ static std::string replaceAll(const std::string &content,
 
 int main(int argc, char **argv) {
     if (argc != 4) {
-        std::cerr << "Usage: " << (argc > 0 ? argv[0] : "./ex04")
-                  << " <filename> <s1> <s2>" << std::endl;
+        std::cerr << "Usage: " << (argc > 0 ? argv[0] : "./ex04") << " <filename> <s1> <s2>" << std::endl;
         return 1;
     }
 
@@ -32,13 +29,13 @@ int main(int argc, char **argv) {
     std::string s2 = argv[3];
 
     if (s1.empty()) {
-        std::cerr << "Error: s1 must not be empty" << std::endl;
+        std::cerr << "Error: s1 is required" << std::endl;
         return 1;
     }
 
     std::ifstream input(filename.c_str());
     if (!input.is_open()) {
-        std::cerr << "Error: could not open file '" << filename << "'" << std::endl;
+        std::cerr << "Error: faild to open file '" << filename << "'" << std::endl;
         return 1;
     }
 
@@ -52,7 +49,7 @@ int main(int argc, char **argv) {
     std::string outName = filename + ".replace";
     std::ofstream output(outName.c_str());
     if (!output.is_open()) {
-        std::cerr << "Error: could not create file '" << outName << "'" << std::endl;
+        std::cerr << "Error: failed to create file '" << outName << "'" << std::endl;
         return 1;
     }
 
