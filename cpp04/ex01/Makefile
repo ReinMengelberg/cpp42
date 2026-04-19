@@ -1,5 +1,5 @@
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98
+CXXFLAGS = -Wall -Wextra -Werror -std=c++17
 NAME = ex01
 
 SRCDIR = src
@@ -8,7 +8,7 @@ OBJDIR = obj
 
 INCLUDES = -I$(INCDIR)
 
-SOURCES = main.cpp ClapTrap.cpp ScavTrap.cpp
+SOURCES = main.cpp Animal.cpp Dog.cpp Cat.cpp WrongAnimal.cpp WrongCat.cpp Brain.cpp
 OBJECTS = $(SOURCES:%.cpp=$(OBJDIR)/%.o)
 
 SRCFILES = $(SOURCES:%.cpp=$(SRCDIR)/%.cpp)

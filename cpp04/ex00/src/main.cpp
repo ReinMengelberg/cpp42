@@ -1,46 +1,63 @@
-#include "ClapTrap.hpp"
+#include "Animal.hpp"
+#include "Dog.hpp"
+#include "Cat.hpp"
+#include "WrongAnimal.hpp"
+#include "WrongCat.hpp"
 #include <iostream>
 
 int main(void)
 {
-	std::cout << "=== Basic ClapTrap test ===" << std::endl;
+	std::cout << "=== Subject example: polymorphic dispatch ===" << std::endl;
 	{
-		ClapTrap alice("Alice");
-		ClapTrap bob("Bob");
+		const Animal* meta = new Animal();
+		const Animal* j = new Dog();
+		const Animal* i = new Cat();
 
-		alice.attack("Bob");
-		bob.takeDamage(3);
-		bob.beRepaired(2);
+		std::cout << "j type: " << j->getType() << std::endl;
+		std::cout << "i type: " << i->getType() << std::endl;
+
+		i->makeSound();
+		j->makeSound();
+		meta->makeSound();
+
+		delete meta;
+		delete j;
+		delete i;
 	}
 
-	std::cout << std::endl << "=== Copy / assignment test ===" << std::endl;
+	std::cout << std::endl << "=== Stack instances ===" << std::endl;
 	{
-		ClapTrap original("Original");
-		original.takeDamage(2);
+		Dog rex;
+		Cat whiskers;
+		rex.makeSound();
+		whiskers.makeSound();
+	}
 
-		ClapTrap copy(original);
-		copy.attack("dummy");
-
-		ClapTrap assigned;
+	std::cout << std::endl << "=== Copy semantics on Dog ===" << std::endl;
+	{
+		Dog original;
+		Dog copy(original);
+		Dog assigned;
 		assigned = original;
-		assigned.attack("another");
+		copy.makeSound();
+		assigned.makeSound();
 	}
 
-	std::cout << std::endl << "=== Energy exhaustion test ===" << std::endl;
+	std::cout << std::endl << "=== WrongAnimal: no virtual dispatch ===" << std::endl;
 	{
-		ClapTrap charlie("Charlie");
-		for (int i = 0; i < 11; ++i)
-			charlie.attack("practice dummy");
-		charlie.beRepaired(1);
-	}
+		const WrongAnimal* meta = new WrongAnimal();
+		const WrongAnimal* i = new WrongCat();
 
-	std::cout << std::endl << "=== HP exhaustion test ===" << std::endl;
-	{
-		ClapTrap dave("Dave");
-		dave.takeDamage(100);
-		dave.beRepaired(5);
-		dave.attack("ghost");
-		dave.takeDamage(1);
+		std::cout << "i type: " << i->getType() << std::endl;
+
+		i->makeSound();
+		meta->makeSound();
+
+		WrongCat concrete;
+		concrete.makeSound();
+
+		delete meta;
+		delete i;
 	}
 
 	std::cout << std::endl << "=== End of tests ===" << std::endl;
