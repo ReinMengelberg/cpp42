@@ -13,37 +13,37 @@ int main(void)
 	// Animal a;
 	// Animal* a = new Animal();
 
-	std::cout << "=== Polymorphic dispatch via abstract Animal* ===" << std::endl;
+	std::cout << "=== Test: Polymorphic dispatch via abstract Animal* ===" << std::endl;
 	{
-		const Animal* j = new Dog();
-		const Animal* i = new Cat();
+		const Animal* sjakie = new Dog();
+		const Animal* mittens = new Cat();
 
-		j->makeSound();
-		i->makeSound();
+		sjakie->makeSound();
+		mittens->makeSound();
 
-		delete j;
-		delete i;
+		delete sjakie;
+		delete mittens;
 	}
 
-	std::cout << std::endl << "=== Array of Animals (half Dog, half Cat) ===" << std::endl;
+	std::cout << std::endl << "=== Test: Array of Animals (half Dog, half Cat) ===" << std::endl;
 	{
 		Animal* herd[HERD_SIZE];
 
-		for (int k = 0; k < HERD_SIZE / 2; k++)
-			herd[k] = new Dog();
-		for (int k = HERD_SIZE / 2; k < HERD_SIZE; k++)
-			herd[k] = new Cat();
+		for (int i = 0; i < HERD_SIZE / 2; i++)
+			herd[i] = new Dog();
+		for (int i = HERD_SIZE / 2; i < HERD_SIZE; i++)
+			herd[i] = new Cat();
 
 		std::cout << std::endl << "-- making sounds --" << std::endl;
-		for (int k = 0; k < HERD_SIZE; k++)
-			herd[k]->makeSound();
+		for (int i = 0; i < HERD_SIZE; i++)
+			herd[i]->makeSound();
 
 		std::cout << std::endl << "-- deleting herd --" << std::endl;
-		for (int k = 0; k < HERD_SIZE; k++)
-			delete herd[k];
+		for (int i = 0; i < HERD_SIZE; i++)
+			delete herd[i];
 	}
 
-	std::cout << std::endl << "=== Deep copy still intact ===" << std::endl;
+	std::cout << std::endl << "=== Test: Deep copy still intact ===" << std::endl;
 	{
 		Dog original;
 		original.getBrain()->setIdea(0, "Chase the mailman");
@@ -55,9 +55,9 @@ int main(void)
 		std::cout << "copy     idea[0]: " << copy.getBrain()->getIdea(0) << std::endl;
 
 		if (original.getBrain() != copy.getBrain())
-			std::cout << "[OK] brain pointers differ -> deep copy" << std::endl;
+			std::cout << "Success: brain pointers differ -> deep copy" << std::endl;
 		else
-			std::cout << "[KO] shallow copy detected!" << std::endl;
+			std::cout << "Error: shallow copy detected!" << std::endl;
 	}
 
 	std::cout << std::endl << "=== End of tests ===" << std::endl;

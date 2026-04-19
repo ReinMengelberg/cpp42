@@ -7,33 +7,33 @@
 
 int main(void)
 {
-	std::cout << "=== Subject example: polymorphic dispatch ===" << std::endl;
+	std::cout << "=== Test: polymorphic dispatch ===" << std::endl;
 	{
 		const Animal* meta = new Animal();
-		const Animal* j = new Dog();
-		const Animal* i = new Cat();
+		const Animal* sjakie = new Dog();
+		const Animal* mittens = new Cat();
 
-		std::cout << "j type: " << j->getType() << std::endl;
-		std::cout << "i type: " << i->getType() << std::endl;
+		std::cout << "sjakie type: " << sjakie->getType() << std::endl;
+		std::cout << "mittens type: " << mittens->getType() << std::endl;
 
-		i->makeSound();
-		j->makeSound();
+		mittens->makeSound();
+		sjakie->makeSound();
 		meta->makeSound();
 
 		delete meta;
-		delete j;
-		delete i;
+		delete sjakie;
+		delete mittens;
 	}
 
-	std::cout << std::endl << "=== Stack instances ===" << std::endl;
+	std::cout << std::endl << "=== Test: Stack instances ===" << std::endl;
 	{
-		Dog rex;
-		Cat whiskers;
-		rex.makeSound();
-		whiskers.makeSound();
+		Dog georgie;
+		Cat leopold;
+		georgie.makeSound();
+		leopold.makeSound();
 	}
 
-	std::cout << std::endl << "=== Copy semantics on Dog ===" << std::endl;
+	std::cout << std::endl << "=== Test: copy constucting & copy assignment on dog ===" << std::endl;
 	{
 		Dog original;
 		Dog copy(original);
@@ -43,7 +43,7 @@ int main(void)
 		assigned.makeSound();
 	}
 
-	std::cout << std::endl << "=== WrongAnimal: no virtual dispatch ===" << std::endl;
+	std::cout << std::endl << "=== Test: WrongAnimal ===" << std::endl;
 	{
 		const WrongAnimal* meta = new WrongAnimal();
 		const WrongAnimal* i = new WrongCat();
