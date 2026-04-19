@@ -4,13 +4,13 @@
 ClapTrap::ClapTrap()
 	: name("default"), hitPoints(10), energyPoints(10), attackDamage(0)
 {
-	std::cout << "ClapTrap " << name << " constucted with default constructor." << std::endl;
+	std::cout << "ClapTrap " << name << " constructed with default constructor." << std::endl;
 }
 
 ClapTrap::ClapTrap(const std::string& name)
 	: name(name), hitPoints(10), energyPoints(10), attackDamage(0)
 {
-	std::cout << "ClapTrap " << name << " constucted with name constructor." << std::endl;
+	std::cout << "ClapTrap " << name << " constructed with name constructor." << std::endl;
 }
 
 ClapTrap::ClapTrap(const ClapTrap& other)

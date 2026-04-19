@@ -6,31 +6,31 @@ int main(void)
 {
 	std::cout << "=== ClapTrap basic test ===" << std::endl;
 	{
-		ClapTrap alice("Alice");
-		alice.attack("target");
-		alice.takeDamage(4);
-		alice.beRepaired(2);
+		ClapTrap sjaak("Sjaak");
+		sjaak.attack("pinata");
+		sjaak.takeDamage(4);
+		sjaak.beRepaired(2);
 	}
 
 	std::cout << std::endl << "=== ScavTrap construction chaining ===" << std::endl;
 	{
-		ScavTrap sentinel("Sentinel");
-		sentinel.attack("intruder");
-		sentinel.takeDamage(30);
-		sentinel.beRepaired(10);
-		sentinel.guardGate();
+		ScavTrap henk("Henk");
+		henk.attack("bokszak");
+		henk.takeDamage(30);
+		henk.beRepaired(10);
+		henk.guardGate();
 	}
 
 	std::cout << std::endl << "=== ScavTrap copy / assignment ===" << std::endl;
 	{
-		ScavTrap original("Original");
-		original.takeDamage(15);
+		ScavTrap pieter("Pieter");
+		pieter.takeDamage(15);
 
-		ScavTrap copy(original);
-		copy.attack("clone target");
+		ScavTrap copy(pieter);
+		copy.attack("trainingspop");
 
 		ScavTrap assigned;
-		assigned = original;
+		assigned = pieter;
 		assigned.guardGate();
 	}
 
@@ -39,16 +39,16 @@ int main(void)
 		// attack() is not virtual, so through a ClapTrap* pointer
 		// the base-class version is called — this shows the static binding
 		// behaviour you typically get in C++98 without virtual functions.
-		ClapTrap* ptr = new ScavTrap("Polybot");
-		ptr->attack("victim");
+		ClapTrap* ptr = new ScavTrap("Gerrit");
+		ptr->attack("vogelverschrikker");
 		delete ptr;
 	}
 
 	std::cout << std::endl << "=== ScavTrap energy exhaustion ===" << std::endl;
 	{
-		ScavTrap drained("Drained");
+		ScavTrap bertus("Bertus");
 		for (int i = 0; i < 51; ++i)
-			drained.attack("dummy");
+			bertus.attack("zandzak");
 	}
 
 	std::cout << std::endl << "=== End of tests ===" << std::endl;
