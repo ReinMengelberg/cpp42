@@ -6,7 +6,7 @@ ScavTrap::ScavTrap() : ClapTrap()
 	hitPoints = 100;
 	energyPoints = 50;
 	attackDamage = 20;
-	std::cout << "ScavTrap " << name << " default-constructed." << std::endl;
+	std::cout << "ScavTrap " << name << " constucted with default constructor." << std::endl;
 }
 
 ScavTrap::ScavTrap(const std::string& name) : ClapTrap(name)
@@ -14,17 +14,17 @@ ScavTrap::ScavTrap(const std::string& name) : ClapTrap(name)
 	hitPoints = 100;
 	energyPoints = 50;
 	attackDamage = 20;
-	std::cout << "ScavTrap " << name << " constructed." << std::endl;
+	std::cout << "ScavTrap " << name << " constucted with name constructor." << std::endl;
 }
 
 ScavTrap::ScavTrap(const ScavTrap& other) : ClapTrap(other)
 {
-	std::cout << "ScavTrap " << name << " copy-constructed." << std::endl;
+	std::cout << "ScavTrap " << name << " constructed with copy constructor." << std::endl;
 }
 
 ScavTrap& ScavTrap::operator=(const ScavTrap& other)
 {
-	std::cout << "ScavTrap " << name << " copy-assigned from " << other.name << "." << std::endl;
+	std::cout << "ScavTrap " << name << " copy assigned from " << other.name << "." << std::endl;
 	if (this != &other)
 		ClapTrap::operator=(other);
 	return *this;
@@ -39,12 +39,12 @@ void ScavTrap::attack(const std::string& target)
 {
 	if (hitPoints == 0)
 	{
-		std::cout << "ScavTrap " << name << " can't attack: no hit points left." << std::endl;
+		std::cout << "ScavTrap " << name << " can't attack: not enough hitpoints." << std::endl;
 		return;
 	}
 	if (energyPoints == 0)
 	{
-		std::cout << "ScavTrap " << name << " can't attack: no energy points left." << std::endl;
+		std::cout << "ScavTrap " << name << " can't attack: not enough energypoints." << std::endl;
 		return;
 	}
 	energyPoints--;

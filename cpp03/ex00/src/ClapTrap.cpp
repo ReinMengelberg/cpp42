@@ -49,7 +49,7 @@ void ClapTrap::attack(const std::string& target)
 	}
 	if (energyPoints == 0)
 	{
-		std::cout << "ClapTrap " << name << " can't attack: not enough energy points." << std::endl;
+		std::cout << "ClapTrap " << name << " can't attack: not enough energypoints." << std::endl;
 		return;
 	}
 	energyPoints--;
@@ -81,7 +81,7 @@ void ClapTrap::beRepaired(unsigned int amount)
 	}
 	if (energyPoints == 0)
 	{
-		std::cout << "ClapTrap " << name << " can't be repaired: is already out of energy points" << std::endl;
+		std::cout << "ClapTrap " << name << " can't be repaired: is already out of energypoints" << std::endl;
 		return;
 	}
 	energyPoints--;

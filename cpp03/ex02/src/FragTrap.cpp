@@ -6,7 +6,7 @@ FragTrap::FragTrap() : ClapTrap()
 	hitPoints = 100;
 	energyPoints = 100;
 	attackDamage = 30;
-	std::cout << "FragTrap " << name << " default-constructed." << std::endl;
+	std::cout << "FragTrap " << name << " constucted with default constructor." << std::endl;
 }
 
 FragTrap::FragTrap(const std::string& name) : ClapTrap(name)
@@ -14,17 +14,17 @@ FragTrap::FragTrap(const std::string& name) : ClapTrap(name)
 	hitPoints = 100;
 	energyPoints = 100;
 	attackDamage = 30;
-	std::cout << "FragTrap " << name << " constructed." << std::endl;
+	std::cout << "FragTrap " << name << " constucted with name constructor." << std::endl;
 }
 
 FragTrap::FragTrap(const FragTrap& other) : ClapTrap(other)
 {
-	std::cout << "FragTrap " << name << " copy-constructed." << std::endl;
+	std::cout << "FragTrap " << name << " constructed with copy constructor." << std::endl;
 }
 
 FragTrap& FragTrap::operator=(const FragTrap& other)
 {
-	std::cout << "FragTrap " << name << " copy-assigned from " << other.name << "." << std::endl;
+	std::cout << "FragTrap " << name << " copy assigned from " << other.name << "." << std::endl;
 	if (this != &other)
 		ClapTrap::operator=(other);
 	return *this;
