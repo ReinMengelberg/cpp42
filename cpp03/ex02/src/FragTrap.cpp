@@ -3,28 +3,28 @@
 
 FragTrap::FragTrap() : ClapTrap()
 {
-	_hitPoints = 100;
-	_energyPoints = 100;
-	_attackDamage = 30;
-	std::cout << "FragTrap " << _name << " default-constructed." << std::endl;
+	hitPoints = 100;
+	energyPoints = 100;
+	attackDamage = 30;
+	std::cout << "FragTrap " << name << " default-constructed." << std::endl;
 }
 
 FragTrap::FragTrap(const std::string& name) : ClapTrap(name)
 {
-	_hitPoints = 100;
-	_energyPoints = 100;
-	_attackDamage = 30;
-	std::cout << "FragTrap " << _name << " constructed." << std::endl;
+	hitPoints = 100;
+	energyPoints = 100;
+	attackDamage = 30;
+	std::cout << "FragTrap " << name << " constructed." << std::endl;
 }
 
 FragTrap::FragTrap(const FragTrap& other) : ClapTrap(other)
 {
-	std::cout << "FragTrap " << _name << " copy-constructed." << std::endl;
+	std::cout << "FragTrap " << name << " copy-constructed." << std::endl;
 }
 
 FragTrap& FragTrap::operator=(const FragTrap& other)
 {
-	std::cout << "FragTrap " << _name << " copy-assigned from " << other._name << "." << std::endl;
+	std::cout << "FragTrap " << name << " copy-assigned from " << other.name << "." << std::endl;
 	if (this != &other)
 		ClapTrap::operator=(other);
 	return *this;
@@ -32,10 +32,10 @@ FragTrap& FragTrap::operator=(const FragTrap& other)
 
 FragTrap::~FragTrap()
 {
-	std::cout << "FragTrap " << _name << " destroyed." << std::endl;
+	std::cout << "FragTrap " << name << " destroyed." << std::endl;
 }
 
 void FragTrap::highFivesGuys(void)
 {
-	std::cout << "FragTrap " << _name << " requests a positive high five! Come on, don't leave me hanging!" << std::endl;
+	std::cout << "FragTrap " << name << " requests a positive high five! Come on, don't leave me hanging!" << std::endl;
 }
