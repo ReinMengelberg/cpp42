@@ -7,54 +7,54 @@ int main(void)
 {
 	std::cout << "=== ClapTrap baseline ===" << std::endl;
 	{
-		ClapTrap alice("Alice");
-		alice.attack("target");
-		alice.takeDamage(4);
-		alice.beRepaired(2);
+		ClapTrap sjaak("Sjaak");
+		sjaak.attack("pinata");
+		sjaak.takeDamage(4);
+		sjaak.beRepaired(2);
 	}
 
 	std::cout << std::endl << "=== ScavTrap test ===" << std::endl;
 	{
-		ScavTrap sentinel("Sentinel");
-		sentinel.attack("intruder");
-		sentinel.takeDamage(30);
-		sentinel.beRepaired(10);
-		sentinel.guardGate();
+		ScavTrap henk("Henk");
+		henk.attack("bokszak");
+		henk.takeDamage(30);
+		henk.beRepaired(10);
+		henk.guardGate();
 	}
 
 	std::cout << std::endl << "=== FragTrap construction chaining ===" << std::endl;
 	{
-		FragTrap party("Party");
-		party.attack("boss");
-		party.takeDamage(25);
-		party.beRepaired(10);
-		party.highFivesGuys();
+		FragTrap wim("Wim");
+		wim.attack("stropop");
+		wim.takeDamage(25);
+		wim.beRepaired(10);
+		wim.highFivesGuys();
 	}
 
 	std::cout << std::endl << "=== FragTrap copy / assignment ===" << std::endl;
 	{
-		FragTrap original("Original");
-		original.takeDamage(20);
+		FragTrap pieter("Pieter");
+		pieter.takeDamage(20);
 
-		FragTrap copy(original);
-		copy.attack("clone target");
+		FragTrap copy(pieter);
+		copy.attack("trainingspop");
 		copy.highFivesGuys();
 
 		FragTrap assigned;
-		assigned = original;
+		assigned = pieter;
 		assigned.highFivesGuys();
 	}
 
 	std::cout << std::endl << "=== Side-by-side derived classes ===" << std::endl;
 	{
-		ScavTrap scav("Guardian");
-		FragTrap frag("Partier");
+		ScavTrap dirk("Dirk");
+		FragTrap jaap("Jaap");
 
-		scav.attack("invader");
-		frag.attack("invader");
+		dirk.attack("vogelverschrikker");
+		jaap.attack("vogelverschrikker");
 
-		scav.guardGate();
-		frag.highFivesGuys();
+		dirk.guardGate();
+		jaap.highFivesGuys();
 	}
 
 	std::cout << std::endl << "=== End of tests ===" << std::endl;

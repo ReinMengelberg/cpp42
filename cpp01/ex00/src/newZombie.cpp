@@ -1,4 +1,3 @@
-// ./newZombie.cpp
 #include "Zombie.hpp"
 
 Zombie* newZombie(const std::string& name) {

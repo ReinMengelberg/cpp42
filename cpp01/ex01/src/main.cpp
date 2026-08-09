@@ -11,7 +11,7 @@ int main(void) {
         horde1[i].announce();
     }
 
-    delete[] horde1;  // Free the memory
+    delete[] horde1;
 
 	std::string name2 = "Sjaak";
     horde2 = zombieHorde(5, name2);
@@ -20,7 +20,7 @@ int main(void) {
         horde2[i].announce();
     }
 
-    delete[] horde2;  // Free the memory
+    delete[] horde2;
 
     return 0;
 }

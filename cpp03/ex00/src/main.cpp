@@ -5,42 +5,42 @@ int main(void)
 {
 	std::cout << "=== Basic ClapTrap test ===" << std::endl;
 	{
-		ClapTrap alice("Alice");
-		ClapTrap bob("Bob");
+		ClapTrap sjaak("Sjaak");
+		ClapTrap karel("Karel");
 
-		alice.attack("Bob");
-		bob.takeDamage(3);
-		bob.beRepaired(2);
+		sjaak.attack("Karel");
+		karel.takeDamage(3);
+		karel.beRepaired(2);
 	}
 
 	std::cout << std::endl << "=== Copy / assignment test ===" << std::endl;
 	{
-		ClapTrap original("Original");
-		original.takeDamage(2);
+		ClapTrap pieter("Pieter");
+		pieter.takeDamage(2);
 
-		ClapTrap copy(original);
-		copy.attack("dummy");
+		ClapTrap copy(pieter);
+		copy.attack("pinata");
 
 		ClapTrap assigned;
-		assigned = original;
-		assigned.attack("another");
+		assigned = pieter;
+		assigned.attack("bokszak");
 	}
 
 	std::cout << std::endl << "=== Energy exhaustion test ===" << std::endl;
 	{
-		ClapTrap charlie("Charlie");
+		ClapTrap henk("Henk");
 		for (int i = 0; i < 11; ++i)
-			charlie.attack("practice dummy");
-		charlie.beRepaired(1);
+			henk.attack("oefenpop");
+		henk.beRepaired(1);
 	}
 
 	std::cout << std::endl << "=== HP exhaustion test ===" << std::endl;
 	{
-		ClapTrap dave("Dave");
-		dave.takeDamage(100);
-		dave.beRepaired(5);
-		dave.attack("ghost");
-		dave.takeDamage(1);
+		ClapTrap kees("Kees");
+		kees.takeDamage(100);
+		kees.beRepaired(5);
+		kees.attack("stropop");
+		kees.takeDamage(1);
 	}
 
 	std::cout << std::endl << "=== End of tests ===" << std::endl;

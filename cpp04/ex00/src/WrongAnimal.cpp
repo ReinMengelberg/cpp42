@@ -1,0 +1,40 @@
+#include "WrongAnimal.hpp"
+#include <iostream>
+
+WrongAnimal::WrongAnimal() : type("WrongAnimal")
+{
+	std::cout << "WrongAnimal default constructor called." << std::endl;
+}
+
+WrongAnimal::WrongAnimal(const std::string& type) : type(type)
+{
+	std::cout << "WrongAnimal type constructor called for " << type << "." << std::endl;
+}
+
+WrongAnimal::WrongAnimal(const WrongAnimal& other) : type(other.type)
+{
+	std::cout << "WrongAnimal copy constructor called for " << type << "." << std::endl;
+}
+
+WrongAnimal& WrongAnimal::operator=(const WrongAnimal& other)
+{
+	std::cout << "WrongAnimal copy assignment called: " << type << " = " << other.type << "." << std::endl;
+	if (this != &other)
+		type = other.type;
+	return *this;
+}
+
+WrongAnimal::~WrongAnimal()
+{
+	std::cout << "WrongAnimal destructor called for " << type << "." << std::endl;
+}
+
+void WrongAnimal::makeSound() const
+{
+	std::cout << type << " makes sound: " << "**Wrong Generic Sound**" << std::endl;
+}
+
+const std::string& WrongAnimal::getType() const
+{
+	return type;
+}
