@@ -54,6 +54,20 @@ int main(void)
 		}
 	}
 
+	std::cout << std::endl << "=== Test: the intern's shrubbery form gets executed ===" << std::endl;
+	{
+		Intern		someRandomIntern;
+		Bureaucrat	gardener("Hermes Conrad", 1);
+		AForm*		scf = someRandomIntern.makeForm("shrubbery creation", "garden");
+
+		if (scf)
+		{
+			gardener.signForm(*scf);
+			gardener.executeForm(*scf);
+			delete scf;
+		}
+	}
+
 	std::cout << std::endl << "=== Test: the intern's form still enforces the grades ===" << std::endl;
 	{
 		Intern		someRandomIntern;
