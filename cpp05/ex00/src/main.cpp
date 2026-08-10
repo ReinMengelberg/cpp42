@@ -4,8 +4,8 @@ int main(void)
 {
 	std::cout << "=== Test: valid bureaucrats ===" << std::endl;
 	{
-		Bureaucrat boss("Vogon Prostetnic", 1);
-		Bureaucrat intern("Arthur Dent", 150);
+		Bureaucrat boss("Number 1.0", 1);
+		Bureaucrat intern("Dr. John Zoidberg", 150);
 
 		std::cout << boss << std::endl;
 		std::cout << intern << std::endl;
@@ -14,7 +14,7 @@ int main(void)
 	std::cout << std::endl << "=== Test: grade too high at construction ===" << std::endl;
 	try
 	{
-		Bureaucrat overachiever("Overachiever", 0);
+		Bureaucrat overachiever("Morgan Proctor", 0);
 		std::cout << overachiever << std::endl;
 	}
 	catch (std::exception& e)
@@ -25,7 +25,7 @@ int main(void)
 	std::cout << std::endl << "=== Test: grade too low at construction ===" << std::endl;
 	try
 	{
-		Bureaucrat slacker("Slacker", 151);
+		Bureaucrat slacker("Philip J. Fry", 151);
 		std::cout << slacker << std::endl;
 	}
 	catch (std::exception& e)
@@ -35,19 +35,19 @@ int main(void)
 
 	std::cout << std::endl << "=== Test: increment / decrement ===" << std::endl;
 	{
-		Bureaucrat clerk("Ford Prefect", 3);
+		Bureaucrat mover("Hermes Conrad", 3);
 
-		std::cout << clerk << std::endl;
-		clerk.incrementGrade();
-		std::cout << "after increment: " << clerk << std::endl;
-		clerk.decrementGrade();
-		clerk.decrementGrade();
-		std::cout << "after two decrements: " << clerk << std::endl;
+		std::cout << mover << std::endl;
+		mover.incrementGrade();
+		std::cout << "after increment: " << mover << std::endl;
+		mover.decrementGrade();
+		mover.decrementGrade();
+		std::cout << "after two decrements: " << mover << std::endl;
 	}
 
 	std::cout << std::endl << "=== Test: increment past grade 1 ===" << std::endl;
 	{
-		Bureaucrat top("Zaphod Beeblebrox", 1);
+		Bureaucrat top("Mom", 1);
 
 		try
 		{
@@ -62,7 +62,7 @@ int main(void)
 
 	std::cout << std::endl << "=== Test: decrement past grade 150 ===" << std::endl;
 	{
-		Bureaucrat bottom("Marvin", 150);
+		Bureaucrat bottom("Scruffy", 150);
 
 		try
 		{
@@ -77,9 +77,9 @@ int main(void)
 
 	std::cout << std::endl << "=== Test: copy and assignment ===" << std::endl;
 	{
-		Bureaucrat original("Original", 42);
+		Bureaucrat original("Bender Bending Rodriguez", 42);
 		Bureaucrat copy(original);
-		Bureaucrat assigned("Assigned", 100);
+		Bureaucrat assigned("Turanga Leela", 100);
 
 		assigned = original;
 		std::cout << original << std::endl;

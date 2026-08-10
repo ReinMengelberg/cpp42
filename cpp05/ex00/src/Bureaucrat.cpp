@@ -3,9 +3,9 @@
 static const int	highestGrade = 1;
 static const int	lowestGrade = 150;
 
-Bureaucrat::Bureaucrat() : name("nameless"), grade(lowestGrade)
+Bureaucrat::Bureaucrat() : name("unknown"), grade(lowestGrade)
 {
-	std::cout << "Bureaucrat default constructor called for " << name << "." << std::endl;
+	std::cout << "Bureaucrat constructor called for " << name << "." << std::endl;
 }
 
 Bureaucrat::Bureaucrat(const std::string& name, int grade) : name(name), grade(grade)
