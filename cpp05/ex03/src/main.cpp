@@ -43,7 +43,7 @@ int main(void)
 	std::cout << std::endl << "=== Test: a form made by the intern gets signed and executed ===" << std::endl;
 	{
 		Intern		someRandomIntern;
-		Bureaucrat	boss("Zaphod Beeblebrox", 1);
+		Bureaucrat	boss("Richard Nixon's Head", 1);
 		AForm*		rrf = someRandomIntern.makeForm("robotomy request", "Bender");
 
 		if (rrf)
@@ -57,13 +57,13 @@ int main(void)
 	std::cout << std::endl << "=== Test: the intern's form still enforces the grades ===" << std::endl;
 	{
 		Intern		someRandomIntern;
-		Bureaucrat	intern("Marvin", 150);
-		AForm*		ppf = someRandomIntern.makeForm("presidential pardon", "Marvin");
+		Bureaucrat	underqualified("Dr. John Zoidberg", 150);
+		AForm*		ppf = someRandomIntern.makeForm("presidential pardon", "Dr. John Zoidberg");
 
 		if (ppf)
 		{
-			intern.signForm(*ppf);
-			intern.executeForm(*ppf);
+			underqualified.signForm(*ppf);
+			underqualified.executeForm(*ppf);
 			delete ppf;
 		}
 	}
