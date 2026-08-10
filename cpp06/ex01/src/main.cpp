@@ -1,0 +1,54 @@
+#include "Data.hpp"
+#include "Serializer.hpp"
+
+#include <iostream>
+
+int main(void)
+{
+	Data	data;
+
+	data.name = "Marvin";
+	data.id = 42;
+	data.score = 4.2f;
+
+	std::cout << "=== Test: round trip on a stack object ===" << std::endl;
+	{
+		uintptr_t	raw = Serializer::serialize(&data);
+		Data*		restored = Serializer::deserialize(raw);
+
+		std::cout << "original pointer: " << &data << std::endl;
+		std::cout << "serialized value: " << raw << std::endl;
+		std::cout << "restored pointer: " << restored << std::endl;
+		std::cout << "pointers are " << (restored == &data ? "equal" : "different") << std::endl;
+		std::cout << "restored data:    " << restored->name << ", id " << restored->id
+			<< ", score " << restored->score << std::endl;
+	}
+
+	std::cout << std::endl << "=== Test: round trip on a heap object ===" << std::endl;
+	{
+		Data*	heap = new Data();
+
+		heap->name = "Zaphod";
+		heap->id = 2;
+		heap->score = 1.5f;
+
+		Data*	restored = Serializer::deserialize(Serializer::serialize(heap));
+
+		std::cout << "pointers are " << (restored == heap ? "equal" : "different") << std::endl;
+		std::cout << "restored data:    " << restored->name << ", id " << restored->id
+			<< ", score " << restored->score << std::endl;
+		delete heap;
+	}
+
+	std::cout << std::endl << "=== Test: a NULL pointer survives too ===" << std::endl;
+	{
+		uintptr_t	raw = Serializer::serialize(NULL);
+
+		std::cout << "serialized NULL: " << raw << std::endl;
+		std::cout << "pointers are "
+			<< (Serializer::deserialize(raw) == NULL ? "equal" : "different") << std::endl;
+	}
+
+	std::cout << std::endl << "=== End of tests ===" << std::endl;
+	return 0;
+}
