@@ -15,8 +15,8 @@ int main(void)
 
 	std::cout << "=== Test: shrubbery creation (sign 145, exec 137) ===" << std::endl;
 	{
-		Bureaucrat				gardener("Ford Prefect", 137);
-		ShrubberyCreationForm	form("home");
+		Bureaucrat				gardener("Scruffy", 137);
+		ShrubberyCreationForm	form("planet_express");
 
 		std::cout << form << std::endl;
 		gardener.signForm(form);
@@ -25,7 +25,7 @@ int main(void)
 
 	std::cout << std::endl << "=== Test: executing an unsigned form ===" << std::endl;
 	{
-		Bureaucrat			boss("Vogon Prostetnic", 1);
+		Bureaucrat			boss("Number 1.0", 1);
 		RobotomyRequestForm	form("Bender");
 
 		boss.executeForm(form);
@@ -33,7 +33,7 @@ int main(void)
 
 	std::cout << std::endl << "=== Test: robotomy (sign 72, exec 45), 50% success ===" << std::endl;
 	{
-		Bureaucrat			boss("Vogon Prostetnic", 45);
+		Bureaucrat			boss("Mom", 45);
 		RobotomyRequestForm	form("Bender");
 
 		boss.signForm(form);
@@ -43,17 +43,17 @@ int main(void)
 
 	std::cout << std::endl << "=== Test: grade too low to execute ===" << std::endl;
 	{
-		Bureaucrat				clerk("Arthur Dent", 30);
-		PresidentialPardonForm	form("Arthur Dent");
+		Bureaucrat				underqualified("Philip J. Fry", 25);
+		PresidentialPardonForm	form("Zapp Brannigan");
 
-		clerk.signForm(form);
-		clerk.executeForm(form);
+		underqualified.signForm(form);
+		underqualified.executeForm(form);
 	}
 
 	std::cout << std::endl << "=== Test: presidential pardon (sign 25, exec 5) ===" << std::endl;
 	{
-		Bureaucrat				president("Zaphod Beeblebrox", 1);
-		PresidentialPardonForm	form("Arthur Dent");
+		Bureaucrat				president("Richard Nixon's Head", 1);
+		PresidentialPardonForm	form("Zapp Brannigan");
 
 		president.signForm(form);
 		president.executeForm(form);
@@ -61,12 +61,12 @@ int main(void)
 
 	std::cout << std::endl << "=== Test: polymorphic use through AForm* ===" << std::endl;
 	{
-		Bureaucrat	boss("Trillian", 1);
+		Bureaucrat	boss("Turanga Leela", 1);
 		AForm*		forms[3];
 
 		forms[0] = new ShrubberyCreationForm("garden");
-		forms[1] = new RobotomyRequestForm("Marvin");
-		forms[2] = new PresidentialPardonForm("Slartibartfast");
+		forms[1] = new RobotomyRequestForm("Calculon");
+		forms[2] = new PresidentialPardonForm("Dr. John Zoidberg");
 
 		for (int i = 0; i < 3; i++)
 		{
@@ -79,8 +79,8 @@ int main(void)
 
 	std::cout << std::endl << "=== Test: execute() throws when called directly ===" << std::endl;
 	{
-		Bureaucrat				intern("Marvin", 150);
-		PresidentialPardonForm	form("Marvin");
+		Bureaucrat				intern("Dr. John Zoidberg", 150);
+		PresidentialPardonForm	form("Dr. John Zoidberg");
 
 		try
 		{
