@@ -1,6 +1,7 @@
 #include "ScalarConverter.hpp"
 
 #include <cctype>
+#include <cerrno>
 #include <cmath>
 #include <cstdlib>
 #include <iomanip>
@@ -8,8 +9,10 @@
 #include <limits>
 #include <sstream>
 
-// Every conversion below is a plain, well defined conversion between scalar
-// types, so static_cast is the cast this exercise needs.
+// The literal is first read into its own type (char, int, float or double),
+// and only then converted to the three other types. Each of those is a plain,
+// well defined conversion between scalar types, so static_cast is the cast
+// this exercise needs.
 
 enum LiteralType {
 	CHAR_LITERAL,
@@ -19,25 +22,53 @@ enum LiteralType {
 	INVALID_LITERAL
 };
 
-static bool	isInfinite(double value)
-{
-	return value == std::numeric_limits<double>::infinity()
-		|| value == -std::numeric_limits<double>::infinity();
-}
+// Significant digits worth printing: a float carries about 6 of them and a
+// double about 15, showing more would only expose rounding noise.
+static const int	FLOAT_DIGITS = std::numeric_limits<float>::digits10;
+static const int	DOUBLE_DIGITS = std::numeric_limits<double>::digits10;
+
+/* ------------------------------------------------------------------ helpers */
 
 static bool	isNotANumber(double value)
 {
 	return value != value;
 }
 
-static bool	isCharLiteral(const std::string& literal)
+static bool	isInfinite(double value)
 {
-	if (literal.length() == 3 && literal[0] == '\'' && literal[2] == '\'')
-		return true;
-	return literal.length() == 1
-		&& !std::isdigit(static_cast<unsigned char>(literal[0]));
+	return value == std::numeric_limits<double>::infinity()
+		|| value == -std::numeric_limits<double>::infinity();
 }
 
+static bool	isDigit(char c)
+{
+	return std::isdigit(static_cast<unsigned char>(c)) != 0;
+}
+
+/* --------------------------------------------------------- type detection */
+
+static bool	isFloatPseudoLiteral(const std::string& literal)
+{
+	return literal == "nanf" || literal == "+inff" || literal == "-inff"
+		|| literal == "inff";
+}
+
+static bool	isDoublePseudoLiteral(const std::string& literal)
+{
+	return literal == "nan" || literal == "+inf" || literal == "-inf"
+		|| literal == "inf";
+}
+
+// Either quoted ('c') or a bare character, as the shell eats the quotes.
+static bool	isCharLiteral(const std::string& literal)
+{
+	if (literal.length() == 3)
+		return literal[0] == '\'' && literal[2] == '\'';
+	return literal.length() == 1 && !isDigit(literal[0]);
+}
+
+// An optional sign followed by digits only, and the value must fit in an int:
+// a bigger number is not an int literal, it is handled as a double instead.
 static bool	isIntLiteral(const std::string& literal)
 {
 	std::string::size_type	i = 0;
@@ -46,161 +77,262 @@ static bool	isIntLiteral(const std::string& literal)
 		i++;
 	if (i == literal.length())
 		return false;
-	while (i < literal.length())
-	{
-		if (!std::isdigit(static_cast<unsigned char>(literal[i])))
+	for (; i < literal.length(); i++)
+		if (!isDigit(literal[i]))
 			return false;
-		i++;
-	}
-	return true;
+
+	errno = 0;
+	long	value = std::strtol(literal.c_str(), NULL, 10);
+
+	return errno != ERANGE
+		&& value >= std::numeric_limits<int>::min()
+		&& value <= std::numeric_limits<int>::max();
 }
 
-// Returns true when strtod() manages to read the whole string, except for the
-// trailing characters left in `remainder` (the "f" suffix of a float).
-static bool	parsesFully(const std::string& literal, const char* remainder)
+// The decimal notation of a floating point number: an optional sign, digits
+// with an optional '.' among them, and an optional exponent ("-4.2", ".5",
+// "1e5"). Anything else strtod() would accept (hex, spaces...) is refused.
+static bool	isDecimalNotation(const std::string& literal)
 {
-	char*	end = NULL;
+	std::string::size_type	i = 0;
+	bool					hasDigits = false;
 
-	std::strtod(literal.c_str(), &end);
-	if (end == literal.c_str())
+	if (i < literal.length() && (literal[i] == '+' || literal[i] == '-'))
+		i++;
+	for (; i < literal.length() && isDigit(literal[i]); i++)
+		hasDigits = true;
+	if (i < literal.length() && literal[i] == '.')
+		for (i++; i < literal.length() && isDigit(literal[i]); i++)
+			hasDigits = true;
+	if (!hasDigits)
 		return false;
-	return std::string(end) == remainder;
+	if (i < literal.length() && (literal[i] == 'e' || literal[i] == 'E'))
+	{
+		i++;
+		if (i < literal.length() && (literal[i] == '+' || literal[i] == '-'))
+			i++;
+		if (i == literal.length() || !isDigit(literal[i]))
+			return false;
+		while (i < literal.length() && isDigit(literal[i]))
+			i++;
+	}
+	return i == literal.length();
+}
+
+// A number in decimal notation with the "f" suffix. A value too big for a
+// float overflows, so it is not a valid float literal.
+static bool	isFloatLiteral(const std::string& literal)
+{
+	if (literal.length() < 2 || literal[literal.length() - 1] != 'f')
+		return false;
+
+	std::string	number = literal.substr(0, literal.length() - 1);
+
+	return isDecimalNotation(number)
+		&& !isInfinite(static_cast<float>(std::atof(number.c_str())));
+}
+
+static bool	isDoubleLiteral(const std::string& literal)
+{
+	return isDecimalNotation(literal)
+		&& !isInfinite(std::atof(literal.c_str()));
 }
 
 static LiteralType	detectType(const std::string& literal)
 {
 	if (literal.empty())
 		return INVALID_LITERAL;
-	if (literal == "nanf" || literal == "+inff" || literal == "-inff" || literal == "inff")
+	if (isFloatPseudoLiteral(literal))
 		return FLOAT_LITERAL;
-	if (literal == "nan" || literal == "+inf" || literal == "-inf" || literal == "inf")
+	if (isDoublePseudoLiteral(literal))
 		return DOUBLE_LITERAL;
 	if (isCharLiteral(literal))
 		return CHAR_LITERAL;
 	if (isIntLiteral(literal))
 		return INT_LITERAL;
-	if (literal[literal.length() - 1] == 'f' && parsesFully(literal, "f"))
+	if (isFloatLiteral(literal))
 		return FLOAT_LITERAL;
-	if (parsesFully(literal, ""))
+	if (isDoubleLiteral(literal))
 		return DOUBLE_LITERAL;
 	return INVALID_LITERAL;
 }
 
-static char	extractChar(const std::string& literal)
+/* ---------------------------------------------- string to the actual type */
+
+static char	parseChar(const std::string& literal)
 {
 	if (literal.length() == 3)
 		return literal[1];
 	return literal[0];
 }
 
-static double	extractPseudoLiteral(const std::string& literal)
+static double	parsePseudoLiteral(const std::string& literal)
 {
-	if (literal == "nan" || literal == "nanf")
+	if (literal[0] == 'n')
 		return std::numeric_limits<double>::quiet_NaN();
 	if (literal[0] == '-')
 		return -std::numeric_limits<double>::infinity();
 	return std::numeric_limits<double>::infinity();
 }
 
-static bool	isPseudoLiteral(const std::string& literal)
+// C++98 has no strtof(), so a float literal is read with atof() and narrowed
+// right away: from here on the value only exists as a float.
+static float	parseFloat(const std::string& literal)
 {
-	return literal == "nan" || literal == "nanf"
-		|| literal == "inf" || literal == "inff"
-		|| literal == "+inf" || literal == "+inff"
-		|| literal == "-inf" || literal == "-inff";
+	if (isFloatPseudoLiteral(literal))
+		return static_cast<float>(parsePseudoLiteral(literal));
+	return static_cast<float>(std::atof(literal.c_str()));
 }
 
-// Whole numbers must still show a decimal part ("42.0f"), the others are
-// printed with the default precision of the stream ("4.2f").
-static std::string	formatFloatingPoint(double value, bool isFloat)
+static double	parseDouble(const std::string& literal)
+{
+	if (isDoublePseudoLiteral(literal))
+		return parsePseudoLiteral(literal);
+	return std::atof(literal.c_str());
+}
+
+/* ------------------------------------------------------------------ output */
+
+static void	printImpossible(const char* type)
+{
+	std::cout << type << ": impossible" << std::endl;
+}
+
+static void	printChar(char value)
+{
+	std::cout << "char: ";
+	if (std::isprint(static_cast<unsigned char>(value)))
+		std::cout << "'" << value << "'" << std::endl;
+	else
+		std::cout << "Non displayable" << std::endl;
+}
+
+static void	printInt(int value)
+{
+	std::cout << "int: " << value << std::endl;
+}
+
+// Whole numbers keep a decimal part ("42.0"), the others are printed with the
+// given number of significant digits ("4.2", "3.14159").
+static std::string	formatFloatingPoint(double value, int digits, const char* suffix)
 {
 	std::ostringstream	out;
 
 	if (isNotANumber(value))
-		return isFloat ? "nanf" : "nan";
-	if (isInfinite(value))
-		return value < 0 ? (isFloat ? "-inff" : "-inf") : (isFloat ? "+inff" : "+inf");
-	if (value == std::floor(value) && std::fabs(value) < 1e16)
+		out << "nan";
+	else if (isInfinite(value))
+		out << (value < 0 ? "-inf" : "+inf");
+	else if (value == std::floor(value) && std::fabs(value) < 1e15)
 		out << std::fixed << std::setprecision(1) << value;
 	else
-		out << value;
-	if (isFloat)
-		out << "f";
+		out << std::setprecision(digits) << value;
+	out << suffix;
 	return out.str();
 }
 
-static void	displayChar(double value)
+static void	printFloat(float value)
 {
-	std::cout << "char: ";
-	if (isNotANumber(value) || isInfinite(value)
-		|| value < static_cast<double>(std::numeric_limits<char>::min())
-		|| value > static_cast<double>(std::numeric_limits<char>::max()))
-	{
-		std::cout << "impossible" << std::endl;
-		return;
-	}
-
-	char	c = static_cast<char>(value);
-
-	if (!std::isprint(static_cast<unsigned char>(c)))
-		std::cout << "Non displayable" << std::endl;
-	else
-		std::cout << "'" << c << "'" << std::endl;
+	std::cout << "float: " << formatFloatingPoint(value, FLOAT_DIGITS, "f") << std::endl;
 }
 
-static void	displayInt(double value)
+static void	printDouble(double value, int digits)
 {
-	std::cout << "int: ";
-	if (isNotANumber(value) || isInfinite(value)
-		|| value < static_cast<double>(std::numeric_limits<int>::min())
-		|| value > static_cast<double>(std::numeric_limits<int>::max()))
-		std::cout << "impossible" << std::endl;
-	else
-		std::cout << static_cast<int>(value) << std::endl;
+	std::cout << "double: " << formatFloatingPoint(value, digits, "") << std::endl;
 }
 
-static void	displayFloat(double value)
-{
-	float	f = static_cast<float>(value);
+/* ------------------------------------- actual type to the three other ones */
 
-	std::cout << "float: ";
+// The range checks compare in double, the only type that holds every limit
+// exactly; the conversions themselves stay explicit casts from the literal's
+// own type.
+static bool	fitsInChar(double value)
+{
+	return !isNotANumber(value)
+		&& value >= std::numeric_limits<char>::min()
+		&& value <= std::numeric_limits<char>::max();
+}
+
+static bool	fitsInInt(double value)
+{
+	return !isNotANumber(value)
+		&& value >= std::numeric_limits<int>::min()
+		&& value <= std::numeric_limits<int>::max();
+}
+
+static void	convertFromChar(char value)
+{
+	printChar(value);
+	printInt(static_cast<int>(value));
+	printFloat(static_cast<float>(value));
+	printDouble(static_cast<double>(value), DOUBLE_DIGITS);
+}
+
+static void	convertFromInt(int value)
+{
+	if (fitsInChar(value))
+		printChar(static_cast<char>(value));
+	else
+		printImpossible("char");
+	printInt(value);
+	printFloat(static_cast<float>(value));
+	printDouble(static_cast<double>(value), DOUBLE_DIGITS);
+}
+
+static void	convertFromFloat(float value)
+{
+	if (fitsInChar(value))
+		printChar(static_cast<char>(value));
+	else
+		printImpossible("char");
+	if (fitsInInt(value))
+		printInt(static_cast<int>(value));
+	else
+		printImpossible("int");
+	printFloat(value);
+	// The double made from a float carries no more digits than the float did.
+	printDouble(static_cast<double>(value), FLOAT_DIGITS);
+}
+
+static void	convertFromDouble(double value)
+{
+	float	asFloat = static_cast<float>(value);
+
+	if (fitsInChar(value))
+		printChar(static_cast<char>(value));
+	else
+		printImpossible("char");
+	if (fitsInInt(value))
+		printInt(static_cast<int>(value));
+	else
+		printImpossible("int");
 	// A finite double that turns into an infinite float has overflowed.
-	if (isInfinite(f) && !isInfinite(value) && !isNotANumber(value))
-		std::cout << "impossible" << std::endl;
+	if (isInfinite(asFloat) && !isInfinite(value))
+		printImpossible("float");
 	else
-		std::cout << formatFloatingPoint(static_cast<double>(f), true) << std::endl;
-}
-
-static void	displayDouble(double value)
-{
-	std::cout << "double: " << formatFloatingPoint(value, false) << std::endl;
+		printFloat(asFloat);
+	printDouble(value, DOUBLE_DIGITS);
 }
 
 void ScalarConverter::convert(const std::string& literal)
 {
-	LiteralType	type = detectType(literal);
-	double		value = 0.0;
-
-	if (type == INVALID_LITERAL)
+	switch (detectType(literal))
 	{
-		std::cout << "char: impossible" << std::endl;
-		std::cout << "int: impossible" << std::endl;
-		std::cout << "float: impossible" << std::endl;
-		std::cout << "double: impossible" << std::endl;
-		return;
+		case CHAR_LITERAL:
+			convertFromChar(parseChar(literal));
+			break;
+		case INT_LITERAL:
+			convertFromInt(std::atoi(literal.c_str()));
+			break;
+		case FLOAT_LITERAL:
+			convertFromFloat(parseFloat(literal));
+			break;
+		case DOUBLE_LITERAL:
+			convertFromDouble(parseDouble(literal));
+			break;
+		default:
+			printImpossible("char");
+			printImpossible("int");
+			printImpossible("float");
+			printImpossible("double");
 	}
-
-	if (type == CHAR_LITERAL)
-		value = static_cast<double>(extractChar(literal));
-	else if (isPseudoLiteral(literal))
-		value = extractPseudoLiteral(literal);
-	else if (type == FLOAT_LITERAL)
-		value = static_cast<double>(static_cast<float>(std::strtod(literal.c_str(), NULL)));
-	else
-		value = std::strtod(literal.c_str(), NULL);
-
-	displayChar(value);
-	displayInt(value);
-	displayFloat(value);
-	displayDouble(value);
 }
