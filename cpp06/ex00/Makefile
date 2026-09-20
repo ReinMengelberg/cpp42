@@ -1,6 +1,6 @@
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
-NAME = convert
+NAME = ex00
 
 SRCDIR = src
 INCDIR = includes

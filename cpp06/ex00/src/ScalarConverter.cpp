@@ -199,9 +199,6 @@ static std::string	formatFloatingPoint(double value, int digits, const char* suf
 		out << "nan";
 	else if (isInfinite(value))
 		out << (value < 0 ? "-inf" : "+inf");
-	// A whole number gets the ".0" the subject asks for, but only while it fits
-	// in the digits the type really carries: printing 1e15f as 999999986991104.0f
-	// would show fifteen digits a float never had.
 	else if (value == std::floor(value) && std::fabs(value) < std::pow(10.0, digits))
 		out << std::fixed << std::setprecision(1) << value;
 	else
@@ -220,9 +217,6 @@ static void	printDouble(double value, int digits)
 	std::cout << "double: " << formatFloatingPoint(value, digits, "") << std::endl;
 }
 
-// A floating point to integer cast truncates toward zero first, so it is the
-// truncated value that has to be representable: 127.9 gives a valid 127, while
-// 128.0 is undefined behaviour.
 static double	truncateTowardZero(double value)
 {
 	return value < 0 ? std::ceil(value) : std::floor(value);
@@ -280,7 +274,6 @@ static void	convertFromFloat(float value)
 	else
 		printImpossible("int");
 	printFloat(value);
-	// The double made from a float carries no more digits than the float did.
 	printDouble(static_cast<double>(value), FLOAT_DIGITS);
 }
 
@@ -296,7 +289,6 @@ static void	convertFromDouble(double value)
 		printInt(static_cast<int>(value));
 	else
 		printImpossible("int");
-	// A finite double that turns into an infinite float has overflowed.
 	if (isInfinite(asFloat) && !isInfinite(value))
 		printImpossible("float");
 	else
