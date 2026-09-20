@@ -8,7 +8,7 @@ int main(void)
 	std::cout << std::endl << "=== Start Tests ===" << std::endl;
 	Data	data;
 
-	data.name = "Bertram";
+	data.name = "Stacker";
 
 	data.id = 98;
 	data.score = 9.8f;
@@ -30,9 +30,9 @@ int main(void)
 	{
 		Data*	heap = new Data();
 
-		heap->name = "Zaphod";
-		heap->id = 2;
-		heap->score = 1.5f;
+		heap->name = "Heaper";
+		heap->id = 5;
+		heap->score = 3.5f;
 
 		Data*	restored = Serializer::deserialize(Serializer::serialize(heap));
 

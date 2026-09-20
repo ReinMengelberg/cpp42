@@ -199,7 +199,10 @@ static std::string	formatFloatingPoint(double value, int digits, const char* suf
 		out << "nan";
 	else if (isInfinite(value))
 		out << (value < 0 ? "-inf" : "+inf");
-	else if (value == std::floor(value) && std::fabs(value) < 1e15)
+	// A whole number gets the ".0" the subject asks for, but only while it fits
+	// in the digits the type really carries: printing 1e15f as 999999986991104.0f
+	// would show fifteen digits a float never had.
+	else if (value == std::floor(value) && std::fabs(value) < std::pow(10.0, digits))
 		out << std::fixed << std::setprecision(1) << value;
 	else
 		out << std::setprecision(digits) << value;
@@ -217,18 +220,34 @@ static void	printDouble(double value, int digits)
 	std::cout << "double: " << formatFloatingPoint(value, digits, "") << std::endl;
 }
 
+// A floating point to integer cast truncates toward zero first, so it is the
+// truncated value that has to be representable: 127.9 gives a valid 127, while
+// 128.0 is undefined behaviour.
+static double	truncateTowardZero(double value)
+{
+	return value < 0 ? std::ceil(value) : std::floor(value);
+}
+
 static bool	fitsInChar(double value)
 {
-	return !isNotANumber(value)
-		&& value >= std::numeric_limits<char>::min()
-		&& value <= std::numeric_limits<char>::max();
+	if (isNotANumber(value) || isInfinite(value))
+		return false;
+
+	double	whole = truncateTowardZero(value);
+
+	return whole >= std::numeric_limits<char>::min()
+		&& whole <= std::numeric_limits<char>::max();
 }
 
 static bool	fitsInInt(double value)
 {
-	return !isNotANumber(value)
-		&& value >= std::numeric_limits<int>::min()
-		&& value <= std::numeric_limits<int>::max();
+	if (isNotANumber(value) || isInfinite(value))
+		return false;
+
+	double	whole = truncateTowardZero(value);
+
+	return whole >= std::numeric_limits<int>::min()
+		&& whole <= std::numeric_limits<int>::max();
 }
 
 static void	convertFromChar(char value)
