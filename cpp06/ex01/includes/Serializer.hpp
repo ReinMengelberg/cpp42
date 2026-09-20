@@ -7,8 +7,6 @@
 
 class Serializer {
 private:
-	// Nothing to store, so the class must not be instantiable: the canonical
-	// form is kept private and left undefined on purpose.
 	Serializer();
 	Serializer(const Serializer& other);
 	Serializer& operator=(const Serializer& other);

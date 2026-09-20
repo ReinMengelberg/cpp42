@@ -9,11 +9,6 @@
 #include <limits>
 #include <sstream>
 
-// The literal is first read into its own type (char, int, float or double),
-// and only then converted to the three other types. Each of those is a plain,
-// well defined conversion between scalar types, so static_cast is the cast
-// this exercise needs.
-
 enum LiteralType {
 	CHAR_LITERAL,
 	INT_LITERAL,
@@ -22,8 +17,6 @@ enum LiteralType {
 	INVALID_LITERAL
 };
 
-// Significant digits worth printing: a float carries about 6 of them and a
-// double about 15, showing more would only expose rounding noise.
 static const int	FLOAT_DIGITS = std::numeric_limits<float>::digits10;
 static const int	DOUBLE_DIGITS = std::numeric_limits<double>::digits10;
 
@@ -59,7 +52,6 @@ static bool	isDoublePseudoLiteral(const std::string& literal)
 		|| literal == "inf";
 }
 
-// Either quoted ('c') or a bare character, as the shell eats the quotes.
 static bool	isCharLiteral(const std::string& literal)
 {
 	if (literal.length() == 3)
@@ -67,8 +59,6 @@ static bool	isCharLiteral(const std::string& literal)
 	return literal.length() == 1 && !isDigit(literal[0]);
 }
 
-// An optional sign followed by digits only, and the value must fit in an int:
-// a bigger number is not an int literal, it is handled as a double instead.
 static bool	isIntLiteral(const std::string& literal)
 {
 	std::string::size_type	i = 0;
@@ -89,9 +79,6 @@ static bool	isIntLiteral(const std::string& literal)
 		&& value <= std::numeric_limits<int>::max();
 }
 
-// The decimal notation of a floating point number: an optional sign, digits
-// with an optional '.' among them, and an optional exponent ("-4.2", ".5",
-// "1e5"). Anything else strtod() would accept (hex, spaces...) is refused.
 static bool	isDecimalNotation(const std::string& literal)
 {
 	std::string::size_type	i = 0;
@@ -119,8 +106,6 @@ static bool	isDecimalNotation(const std::string& literal)
 	return i == literal.length();
 }
 
-// A number in decimal notation with the "f" suffix. A value too big for a
-// float overflows, so it is not a valid float literal.
 static bool	isFloatLiteral(const std::string& literal)
 {
 	if (literal.length() < 2 || literal[literal.length() - 1] != 'f')
@@ -157,8 +142,6 @@ static LiteralType	detectType(const std::string& literal)
 	return INVALID_LITERAL;
 }
 
-/* ---------------------------------------------- string to the actual type */
-
 static char	parseChar(const std::string& literal)
 {
 	if (literal.length() == 3)
@@ -175,8 +158,6 @@ static double	parsePseudoLiteral(const std::string& literal)
 	return std::numeric_limits<double>::infinity();
 }
 
-// C++98 has no strtof(), so a float literal is read with atof() and narrowed
-// right away: from here on the value only exists as a float.
 static float	parseFloat(const std::string& literal)
 {
 	if (isFloatPseudoLiteral(literal))
@@ -190,8 +171,6 @@ static double	parseDouble(const std::string& literal)
 		return parsePseudoLiteral(literal);
 	return std::atof(literal.c_str());
 }
-
-/* ------------------------------------------------------------------ output */
 
 static void	printImpossible(const char* type)
 {
@@ -212,8 +191,6 @@ static void	printInt(int value)
 	std::cout << "int: " << value << std::endl;
 }
 
-// Whole numbers keep a decimal part ("42.0"), the others are printed with the
-// given number of significant digits ("4.2", "3.14159").
 static std::string	formatFloatingPoint(double value, int digits, const char* suffix)
 {
 	std::ostringstream	out;
@@ -240,11 +217,6 @@ static void	printDouble(double value, int digits)
 	std::cout << "double: " << formatFloatingPoint(value, digits, "") << std::endl;
 }
 
-/* ------------------------------------- actual type to the three other ones */
-
-// The range checks compare in double, the only type that holds every limit
-// exactly; the conversions themselves stay explicit casts from the literal's
-// own type.
 static bool	fitsInChar(double value)
 {
 	return !isNotANumber(value)

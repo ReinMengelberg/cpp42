@@ -5,8 +5,6 @@
 
 class ScalarConverter {
 private:
-	// The class holds nothing, so it must not be instantiable: the whole
-	// canonical form is kept private and left undefined on purpose.
 	ScalarConverter();
 	ScalarConverter(const ScalarConverter& other);
 	ScalarConverter& operator=(const ScalarConverter& other);

@@ -5,13 +5,15 @@
 
 int main(void)
 {
+	std::cout << std::endl << "=== Start Tests ===" << std::endl;
 	Data	data;
 
-	data.name = "Marvin";
-	data.id = 42;
-	data.score = 4.2f;
+	data.name = "Bertram";
 
-	std::cout << "=== Test: round trip on a stack object ===" << std::endl;
+	data.id = 98;
+	data.score = 9.8f;
+
+	std::cout << "=== Test: round trip on stack object ===" << std::endl;
 	{
 		uintptr_t	raw = Serializer::serialize(&data);
 		Data*		restored = Serializer::deserialize(raw);
@@ -24,7 +26,7 @@ int main(void)
 			<< ", score " << restored->score << std::endl;
 	}
 
-	std::cout << std::endl << "=== Test: round trip on a heap object ===" << std::endl;
+	std::cout << std::endl << "=== Test: round trip on heap object ===" << std::endl;
 	{
 		Data*	heap = new Data();
 
@@ -40,7 +42,7 @@ int main(void)
 		delete heap;
 	}
 
-	std::cout << std::endl << "=== Test: a NULL pointer survives too ===" << std::endl;
+	std::cout << std::endl << "=== Test: NULL pointer ===" << std::endl;
 	{
 		uintptr_t	raw = Serializer::serialize(NULL);
 
@@ -49,6 +51,6 @@ int main(void)
 			<< (Serializer::deserialize(raw) == NULL ? "equal" : "different") << std::endl;
 	}
 
-	std::cout << std::endl << "=== End of tests ===" << std::endl;
+	std::cout << std::endl << "=== Completed tests ===" << std::endl;
 	return 0;
 }
