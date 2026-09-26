@@ -1,11 +1,6 @@
 #ifndef ARRAY_TPP
 #define ARRAY_TPP
 
-// Definitions of the Array class template. They live in a header because the
-// compiler needs them to instantiate the template for every T it is used with.
-
-// new T[0] is a valid, empty allocation: nothing is reserved in advance and
-// the destructor stays symmetrical.
 template <typename T>
 Array<T>::Array() : elements(new T[0]()), length(0)
 {
